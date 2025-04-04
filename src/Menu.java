@@ -184,11 +184,11 @@ public class Menu {
     public static void sobre() {
         String sobre = """
                 \n\n********************************************************************
-                Esse projeto foi feito individualmente por Leonardo de Paula.
-                Meus contatos:
+                        Esse projeto foi feito individualmente por Leonardo de Paula.
+                        Meus contatos:
 
-                leofernandes9@gmail.com
-                https://github.com/leodipaula
+                        leofernandes9@gmail.com
+                        https://github.com/leodipaula
 
                 ********************************************************************\n\n
                 """;
@@ -206,13 +206,13 @@ public class Menu {
 
     static final String MENSAGEM_USUARIO = """
             \n\n%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-            O que deseja fazer agora?
+                                    O que deseja fazer agora?
 
-            1 - Adicionar/Atualizar produto
-            2 - Remover produto
-            3 - Ver carrinho
-            4 - Finalizar compra
-            0 - Sair
+                                1 - Adicionar/Atualizar produto
+                                2 - Remover produto
+                                3 - Ver carrinho
+                                4 - Finalizar compra
+                                0 - Sair
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
             """;
