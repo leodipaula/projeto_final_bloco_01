@@ -10,6 +10,8 @@ public interface ClienteRepository {
 
     public void atualizarCliente(Cliente cliente);
 
-    public void deletarCliente(Cliente cliente);
+    public void deletarCliente(int id);
+
+    public void buscarPorId(int id);
 
 }

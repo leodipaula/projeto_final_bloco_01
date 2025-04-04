@@ -10,8 +10,8 @@ public class ClienteController implements ClienteRepository {
 
     @Override
     public void cadastrarCliente(Cliente cliente) {
-        if (buscarNaCollection(cliente.getEmail()) != null) {
-            System.out.println("Esse email já está registrado em nosso banco de dados.");
+        if (buscarNaCollection(cliente.getId()) != null) {
+            System.out.println("Esse Id já está registrado em nosso banco de dados.");
             return;
         }
         listaClientes.add(cliente);
@@ -24,11 +24,11 @@ public class ClienteController implements ClienteRepository {
 
     @Override
     public void atualizarCliente(Cliente cliente) {
-        var buscaCliente = buscarNaCollection(cliente.getEmail());
+        var buscaCliente = buscarNaCollection(cliente.getId());
 
         if (buscaCliente != null) {
             listaClientes.set(listaClientes.indexOf(buscaCliente), cliente);
-            System.out.println("\nA Cliente: " + cliente.getNome().split(" ")[0]
+            System.out.println("\nA Cliente: " + cliente.getNome().trim().split(" ")[0]
                     + " foi atualizado com sucesso!");
             return;
         }
@@ -36,11 +36,11 @@ public class ClienteController implements ClienteRepository {
     }
 
     @Override
-    public void deletarCliente(Cliente cliente) {
-        var buscaCliente = buscarNaCollection(cliente.getEmail());
+    public void deletarCliente(int id) {
+        var buscaCliente = buscarNaCollection(id);
 
         if (buscaCliente != null) {
-            if (listaClientes.remove(cliente)) {
+            if (listaClientes.remove(buscaCliente)) {
                 System.out.println("Cliente deletado com sucesso!");
                 return;
             }
@@ -48,8 +48,21 @@ public class ClienteController implements ClienteRepository {
         System.out.println("O cliente não foi encontrado!");
     }
 
-    public Cliente buscarNaCollection(String email) {
-        return listaClientes.stream().filter(cliente -> cliente.getEmail() == email).findAny()
+
+
+    @Override
+    public void buscarPorId(int id) {
+        var buscarCliente = buscarNaCollection(id);
+
+        if (buscarCliente != null) {
+            System.out.println(buscarCliente);
+            return;
+        }
+        System.out.println("Cliente não encontrado!");
+    }
+
+    public Cliente buscarNaCollection(int id) {
+        return listaClientes.stream().filter(cliente -> cliente.getId() == id).findAny()
                 .orElse(null);
     }
 }
