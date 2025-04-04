@@ -25,21 +25,33 @@ public class Menu {
 
         while (true) {
             System.out.println(MENSAGEM);
-            int opcao = sc.nextInt();
-            sc.nextLine();
 
-            System.out.print("\nDigite o seu nome: ");
-            String nome = sc.nextLine();
+            int opcao = 0;
+            String nome = "";
+            int idade = 0;
+            String email = "";
+            String telefone = "";
 
-            System.out.print("\nDigite sua idade: ");
-            int idade = sc.nextInt();
-            sc.nextLine();
+            try {
+                opcao = sc.nextInt();
+                sc.nextLine();
 
-            System.out.print("\nDigite seu email: ");
-            String email = sc.nextLine();
+                System.out.print("\nDigite o seu nome: ");
+                nome = sc.nextLine();
 
-            System.out.println("\nDigite seu telefone: ");
-            String telefone = sc.nextLine();
+                System.out.print("\nDigite sua idade: ");
+                idade = sc.nextInt();
+                sc.nextLine();
+
+                System.out.print("\nDigite seu email: ");
+                email = sc.nextLine();
+
+                System.out.println("\nDigite seu telefone: ");
+                telefone = sc.nextLine();
+            } catch (Exception e) {
+                System.out.println("Erro: " + e.getCause());
+                e.printStackTrace();
+            }
 
             Cliente novoCliente = null;
 
@@ -68,8 +80,14 @@ public class Menu {
             while (continuar) {
                 System.out.println(MENSAGEM_USUARIO);
 
-                int acao = sc.nextInt();
-                sc.nextLine();
+                int acao = 0;
+                try {
+                    acao = sc.nextInt();
+                    sc.nextLine();
+                } catch (Exception e) {
+                    System.out.println("Erro: " + e.getCause());
+                    e.printStackTrace();
+                }
 
                 switch (acao) {
                     case 1 -> {
