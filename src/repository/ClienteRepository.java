@@ -4,12 +4,12 @@ import model.Cliente;
 
 public interface ClienteRepository {
 
-    public void CadastrarCliente(Cliente cliente);
+    public void cadastrarCliente(Cliente cliente);
 
-    public void ListarClientes();
+    public void listarClientes();
 
-    public void atualizarQuantidadeDeCliente();
+    public void atualizarCliente(Cliente cliente);
 
-    public void deletarCliente();
+    public void deletarCliente(Cliente cliente);
 
 }
