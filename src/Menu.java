@@ -61,18 +61,28 @@ public class Menu {
 
             switch (opcao) {
                 case 1 -> {
-                    System.out.print("Nome: ");
-                    String nome = sc.nextLine();
-                    System.out.print("Idade: ");
-                    int idade = sc.nextInt();
-                    sc.nextLine();
-                    System.out.print("Email: ");
-                    String email = sc.nextLine();
-                    System.out.print("Telefone: ");
-                    String telefone = sc.nextLine();
-                    System.out.print("Tipo de cliente (1-Padrão, 2-Plus, 3-Premium): ");
-                    int tipo = sc.nextInt();
-                    sc.nextLine();
+                    String nome = "";
+                    int idade = 0;
+                    String email = "";
+                    String telefone = "";
+                    int tipo = 0;
+                    try {
+                        System.out.print("Nome: ");
+                        nome = sc.nextLine();
+                        System.out.print("Idade: ");
+                        idade = sc.nextInt();
+                        sc.nextLine();
+                        System.out.print("Email: ");
+                        email = sc.nextLine();
+                        System.out.print("Telefone: ");
+                        telefone = sc.nextLine();
+                        System.out.print("Tipo de cliente (1-Padrão, 2-Plus, 3-Premium): ");
+                        tipo = sc.nextInt();
+                        sc.nextLine();
+                    } catch (Exception e) {
+                        System.out.println("Erro: " + e.getCause());
+                        e.printStackTrace();
+                    }
 
                     Cliente cliente;
                     switch (tipo) {
@@ -89,25 +99,41 @@ public class Menu {
                 }
                 case 2 -> clienteController.listarClientes();
                 case 3 -> {
-                    System.out.print("ID do cliente: ");
-                    int idBusca = sc.nextInt();
-                    sc.nextLine();
+                    int idBusca = 0;
+                    try {
+                        System.out.print("ID do cliente: ");
+                        idBusca = sc.nextInt();
+                        sc.nextLine();
+                    } catch (Exception e) {
+                        System.out.println("Erro: " + e.getCause());
+                        e.printStackTrace();
+                    }
                     Cliente encontrado = clienteController.buscarNaCollection(idBusca);
                     System.out.println(encontrado != null ? encontrado : "Cliente não encontrado.");
                 }
                 case 4 -> {
-                    System.out.print("Novo nome: ");
-                    String nome = sc.nextLine();
-                    System.out.print("Nova idade: ");
-                    int idade = sc.nextInt();
-                    sc.nextLine();
-                    System.out.print("Novo email: ");
-                    String email = sc.nextLine();
-                    System.out.print("Novo telefone: ");
-                    String telefone = sc.nextLine();
-                    System.out.print("Novo tipo da conta: ");
-                    int tipo = sc.nextInt();
-                    sc.nextLine();
+                    String nome = "";
+                    int idade = 0;
+                    String email = "";
+                    String telefone = "";
+                    int tipo = 0;
+                    try {
+                        System.out.print("Novo nome: ");
+                        nome = sc.nextLine();
+                        System.out.print("Nova idade: ");
+                        idade = sc.nextInt();
+                        sc.nextLine();
+                        System.out.print("Novo email: ");
+                        email = sc.nextLine();
+                        System.out.print("Novo telefone: ");
+                        telefone = sc.nextLine();
+                        System.out.print("Novo tipo da conta: ");
+                        tipo = sc.nextInt();
+                        sc.nextLine();
+                    } catch (Exception e) {
+                        System.out.println("Erro: " + e.getCause());
+                        e.printStackTrace();
+                    }
 
                     Cliente novoCliente;
                     switch (tipo) {
@@ -124,9 +150,15 @@ public class Menu {
                     System.out.println("Cliente atualizado!");
                 }
                 case 5 -> {
-                    System.out.print("ID do cliente: ");
-                    int id = sc.nextInt();
-                    sc.nextLine();
+                    int id = 0;
+                    try {
+                        System.out.print("ID do cliente: ");
+                        id = sc.nextInt();
+                        sc.nextLine();
+                    } catch (Exception e) {
+                        System.out.println("Erro: " + e.getCause());
+                        e.printStackTrace();
+                    }
                     clienteController.deletarCliente(id);
                     System.out.println("Cliente removido!");
                 }
@@ -137,23 +169,34 @@ public class Menu {
     }
 
     private static void menuCliente() {
-        System.out.println(MENSAGEM);
+        int opcao = 0;
+        String nome = "";
+        int idade = 0;
+        String email = "";
+        String telefone = "";
 
-        int opcao = sc.nextInt();
-        sc.nextLine();
+        try {
+            System.out.println(MENSAGEM);
 
-        System.out.print("\nDigite o seu nome: ");
-        String nome = sc.nextLine();
+            opcao = sc.nextInt();
+            sc.nextLine();
 
-        System.out.print("\nDigite sua idade: ");
-        int idade = sc.nextInt();
-        sc.nextLine();
+            System.out.print("\nDigite o seu nome: ");
+            nome = sc.nextLine();
 
-        System.out.print("\nDigite seu email: ");
-        String email = sc.nextLine();
+            System.out.print("\nDigite sua idade: ");
+            idade = sc.nextInt();
+            sc.nextLine();
 
-        System.out.println("\nDigite seu telefone: ");
-        String telefone = sc.nextLine();
+            System.out.print("\nDigite seu email: ");
+            email = sc.nextLine();
+
+            System.out.println("\nDigite seu telefone: ");
+            telefone = sc.nextLine();
+        } catch (Exception e) {
+            System.out.println("Erro: " + e.getCause());
+            e.printStackTrace();
+        }
 
         Cliente novoCliente;
         switch (opcao) {
@@ -174,19 +217,34 @@ public class Menu {
 
         boolean continuar = true;
         while (continuar) {
-            System.out.println(MENSAGEM_USUARIO);
-            int acao = sc.nextInt();
-            sc.nextLine();
+            int acao = 0;
+
+            try {
+                System.out.println(MENSAGEM_USUARIO);
+                acao = sc.nextInt();
+                sc.nextLine();
+            } catch (Exception e) {
+                System.out.println("Erro: " + e.getCause());
+                e.printStackTrace();
+            }
 
             switch (acao) {
                 case 1 -> {
-                    System.out.println(MENSAGEMCOMPRODUTOS);
-                    int cod = sc.nextInt();
-                    sc.nextLine();
+                    int cod = 0;
+                    int qtd = 0;
 
-                    System.out.print("Digite a quantidade: ");
-                    int qtd = sc.nextInt();
-                    sc.nextLine();
+                    try {
+                        System.out.println(MENSAGEMCOMPRODUTOS);
+                        cod = sc.nextInt();
+                        sc.nextLine();
+
+                        System.out.print("Digite a quantidade: ");
+                        qtd = sc.nextInt();
+                        sc.nextLine();
+                    } catch (Exception e) {
+                        System.out.println("Erro: " + e.getCause());
+                        e.printStackTrace();
+                    }
 
                     if (cod == 2) {
                         carrinho.adicionarOuAtualizarItem(cod, qtd,
@@ -201,11 +259,16 @@ public class Menu {
                     keyPress();
                 }
                 case 2 -> {
-                    System.out.print("Digite o código do produto para remover: ");
-                    int cod = sc.nextInt();
-                    carrinho.removerItem(cod);
-                    System.out.println("Removido!");
-                    keyPress();
+                    try {
+                        System.out.print("Digite o código do produto para remover: ");
+                        int cod = sc.nextInt();
+                        carrinho.removerItem(cod);
+                        System.out.println("Removido!");
+                        keyPress();
+                    } catch (Exception e) {
+                        System.out.println("Erro: " + e.getCause());
+                        e.printStackTrace();
+                    }
                 }
                 case 3 -> {
                     carrinho.listarItens();

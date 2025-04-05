@@ -10,10 +10,9 @@ public class JogoMatematica {
     public static boolean jogarMatematica(Scanner scanner) {
         Random random = new Random();
 
-        // Criar expressão com 3 a 4 operações
         StringBuilder expressao = new StringBuilder();
-        int numOperacoes = random.nextInt(2) + 3; // entre 3 e 4
-        expressao.append(random.nextInt(9) + 1); // número inicial
+        int numOperacoes = random.nextInt(2) + 3;
+        expressao.append(random.nextInt(9) + 1);
 
         char[] operadores = {'+', '-', '*'};
         for (int i = 0; i < numOperacoes; i++) {
@@ -65,7 +64,6 @@ public class JogoMatematica {
         try {
             List<String> tokens = new ArrayList<>(Arrays.asList(expressao.split(" ")));
 
-            // Primeiro, resolve multiplicações
             for (int i = 0; i < tokens.size(); i++) {
                 if (tokens.get(i).equals("*")) {
                     int resultado = Integer.parseInt(tokens.get(i - 1))
@@ -77,7 +75,7 @@ public class JogoMatematica {
                 }
             }
 
-            // Depois resolve adições e subtrações
+            // adições e subtrações
             int resultado = Integer.parseInt(tokens.get(0));
             for (int i = 1; i < tokens.size(); i += 2) {
                 String operador = tokens.get(i);
