@@ -1,17 +1,18 @@
 package service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
 
 public class JogoMatematica {
     public static boolean jogarMatematica(Scanner scanner) {
         Random random = new Random();
 
-        // Criando expressão com no mínimo 3 operações
+        // Criar expressão com 3 a 4 operações
         StringBuilder expressao = new StringBuilder();
-        int numOperacoes = random.nextInt(2) + 3; // 3 a 4 operações
+        int numOperacoes = random.nextInt(2) + 3; // entre 3 e 4
         expressao.append(random.nextInt(9) + 1); // número inicial
 
         char[] operadores = {'+', '-', '*'};
@@ -32,7 +33,11 @@ public class JogoMatematica {
 
         int tentativas = 0;
 
+        if (scanner.hasNext())
+            scanner.nextLine();
+
         while (tentativas < 5) {
+
             System.out.println("Tentativa " + (tentativas + 1) + ":");
             String input = scanner.nextLine();
 
@@ -58,10 +63,34 @@ public class JogoMatematica {
 
     private static int avaliarExpressao(String expressao) {
         try {
-            // Usamos o mecanismo de script JavaScript para avaliar a expressão
-            ScriptEngine engine = new ScriptEngineManager().getEngineByName("JavaScript");
-            Object resultado = engine.eval(expressao);
-            return ((Number) resultado).intValue();
+            List<String> tokens = new ArrayList<>(Arrays.asList(expressao.split(" ")));
+
+            // Primeiro, resolve multiplicações
+            for (int i = 0; i < tokens.size(); i++) {
+                if (tokens.get(i).equals("*")) {
+                    int resultado = Integer.parseInt(tokens.get(i - 1))
+                            * Integer.parseInt(tokens.get(i + 1));
+                    tokens.set(i - 1, String.valueOf(resultado));
+                    tokens.remove(i); // remove operador
+                    tokens.remove(i); // remove número à direita
+                    i--; // volta para reavaliar posição
+                }
+            }
+
+            // Depois resolve adições e subtrações
+            int resultado = Integer.parseInt(tokens.get(0));
+            for (int i = 1; i < tokens.size(); i += 2) {
+                String operador = tokens.get(i);
+                int numero = Integer.parseInt(tokens.get(i + 1));
+
+                if (operador.equals("+")) {
+                    resultado += numero;
+                } else if (operador.equals("-")) {
+                    resultado -= numero;
+                }
+            }
+
+            return resultado;
         } catch (Exception e) {
             System.out.println("Erro ao avaliar expressão: " + expressao);
             return 0;
