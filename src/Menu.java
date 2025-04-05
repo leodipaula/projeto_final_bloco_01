@@ -8,7 +8,11 @@ import model.Cliente;
 import model.ClientePadrao;
 import model.ClientePlus;
 import model.ClientePremium;
+import service.ApiConsulta;
 import service.CarrinhoService;
+import service.JogoCacaNiquel;
+import service.JogoMatematica;
+import service.JogoSorteio;
 
 public class Menu {
     static Scanner sc = new Scanner(System.in);
@@ -16,116 +20,255 @@ public class Menu {
     static Map<Integer, CarrinhoService> carrinhos = new HashMap<>();
 
     public static void main(String[] args) {
-        menu();
-    }
-
-    private static void menu() {
-
         executarTestesIniciais();
 
         while (true) {
-            System.out.println(MENSAGEM);
+            System.out.println("\nVocê deseja acessar como:");
+            System.out.println("1 - Admin");
+            System.out.println("2 - Cliente");
+            System.out.println("0 - Sair");
+            System.out.print("Escolha: ");
 
-            int opcao = 0;
-            String nome = "";
-            int idade = 0;
-            String email = "";
-            String telefone = "";
+            int escolha = sc.nextInt();
+            sc.nextLine();
 
-            try {
-                opcao = sc.nextInt();
-                sc.nextLine();
-
-                System.out.print("\nDigite o seu nome: ");
-                nome = sc.nextLine();
-
-                System.out.print("\nDigite sua idade: ");
-                idade = sc.nextInt();
-                sc.nextLine();
-
-                System.out.print("\nDigite seu email: ");
-                email = sc.nextLine();
-
-                System.out.println("\nDigite seu telefone: ");
-                telefone = sc.nextLine();
-            } catch (Exception e) {
-                System.out.println("Erro: " + e.getCause());
-                e.printStackTrace();
+            switch (escolha) {
+                case 1 -> menuAdmin();
+                case 2 -> menuCliente();
+                case 0 -> {
+                    sobre();
+                    return;
+                }
+                default -> System.out.println("Opção inválida!");
             }
+        }
+    }
 
-            Cliente novoCliente = null;
+    private static void menuAdmin() {
+        boolean continuar = true;
+        while (continuar) {
+            System.out.println("\n--- MENU ADMIN ---");
+            System.out.println("1 - Cadastrar cliente");
+            System.out.println("2 - Listar clientes");
+            System.out.println("3 - Buscar cliente por ID");
+            System.out.println("4 - Atualizar cliente");
+            System.out.println("5 - Remover cliente");
+            System.out.println("0 - Voltar ao menu principal");
+            System.out.print("Escolha: ");
+
+            int opcao = sc.nextInt();
+            sc.nextLine();
 
             switch (opcao) {
-                case 1:
-                    novoCliente = new ClientePadrao(nome, idade, email, telefone);
-                    break;
-                case 2:
-                    novoCliente = new ClientePlus(nome, idade, email, telefone);
-                    break;
-                case 3:
-                    novoCliente = new ClientePremium(nome, idade, email, telefone);
-                    break;
-                default:
-                    System.out.println("Opção inválida.");
-                    return;
-            }
-
-            clienteController.cadastrarCliente(novoCliente);
-            CarrinhoService carrinho = new CarrinhoService();
-            carrinhos.put(novoCliente.getId(), carrinho);
-
-            keyPress();
-
-            boolean continuar = true;
-            while (continuar) {
-                System.out.println(MENSAGEM_USUARIO);
-
-                int acao = 0;
-                try {
-                    acao = sc.nextInt();
+                case 1 -> {
+                    System.out.print("Nome: ");
+                    String nome = sc.nextLine();
+                    System.out.print("Idade: ");
+                    int idade = sc.nextInt();
                     sc.nextLine();
-                } catch (Exception e) {
-                    System.out.println("Erro: " + e.getCause());
-                    e.printStackTrace();
-                }
+                    System.out.print("Email: ");
+                    String email = sc.nextLine();
+                    System.out.print("Telefone: ");
+                    String telefone = sc.nextLine();
+                    System.out.print("Tipo de cliente (1-Padrão, 2-Plus, 3-Premium): ");
+                    int tipo = sc.nextInt();
+                    sc.nextLine();
 
-                switch (acao) {
-                    case 1 -> {
-                        System.out.println(MENSAGEMCOMPRODUTOS);
-                        int cod = sc.nextInt();
-                        System.out.print("Digite a nova quantidade: ");
-                        int qtd = sc.nextInt();
-                        carrinho.adicionarOuAtualizarItem(cod, qtd);
-                        System.out.println("Produto adicionado/atualizado!");
-                        keyPress();
+                    Cliente cliente;
+                    switch (tipo) {
+                        case 1 -> cliente = new ClientePadrao(nome, idade, email, telefone);
+                        case 2 -> cliente = new ClientePlus(nome, idade, email, telefone);
+                        case 3 -> cliente = new ClientePremium(nome, idade, email, telefone);
+                        default -> {
+                            System.out.println("Tipo inválido. Cliente não cadastrado.");
+                            continue;
+                        }
                     }
-                    case 2 -> {
-                        System.out.print("Digite o código do produto para remover: ");
-                        int cod = sc.nextInt();
-                        carrinho.removerItem(cod);
-                        System.out.println("Removido!");
-                        keyPress();
-                    }
-                    case 3 -> {
-                        carrinho.listarItens();
-                        keyPress();
-                    }
-                    case 4 -> {
-                        carrinho.listarItens();
-                        System.out.println("Compra finalizada. Obrigado!");
-                        carrinho.limparCarrinho();
-                        continuar = false;
-                        keyPress();
-                    }
-                    case 0 -> continuar = false;
-                    default -> System.out.println("Opção inválida.");
+                    clienteController.cadastrarCliente(cliente);
+                    System.out.println("Cliente cadastrado!");
                 }
+                case 2 -> clienteController.listarClientes();
+                case 3 -> {
+                    System.out.print("ID do cliente: ");
+                    int idBusca = sc.nextInt();
+                    sc.nextLine();
+                    Cliente encontrado = clienteController.buscarNaCollection(idBusca);
+                    System.out.println(encontrado != null ? encontrado : "Cliente não encontrado.");
+                }
+                case 4 -> {
+                    System.out.print("Novo nome: ");
+                    String nome = sc.nextLine();
+                    System.out.print("Nova idade: ");
+                    int idade = sc.nextInt();
+                    sc.nextLine();
+                    System.out.print("Novo email: ");
+                    String email = sc.nextLine();
+                    System.out.print("Novo telefone: ");
+                    String telefone = sc.nextLine();
+                    System.out.print("Novo tipo da conta: ");
+                    int tipo = sc.nextInt();
+                    sc.nextLine();
+
+                    Cliente novoCliente;
+                    switch (tipo) {
+                        case 1 -> novoCliente = new ClientePadrao(nome, idade, email, telefone);
+                        case 2 -> novoCliente = new ClientePlus(nome, idade, email, telefone);
+                        case 3 -> novoCliente = new ClientePremium(nome, idade, email, telefone);
+                        default -> {
+                            System.out.println("Opção inválida.");
+                            novoCliente = null;
+                        }
+                    }
+
+                    clienteController.atualizarCliente(novoCliente);
+                    System.out.println("Cliente atualizado!");
+                }
+                case 5 -> {
+                    System.out.print("ID do cliente: ");
+                    int id = sc.nextInt();
+                    sc.nextLine();
+                    clienteController.deletarCliente(id);
+                    System.out.println("Cliente removido!");
+                }
+                case 0 -> continuar = false;
+                default -> System.out.println("Opção inválida!");
+            }
+        }
+    }
+
+    private static void menuCliente() {
+        System.out.println(MENSAGEM);
+
+        int opcao = sc.nextInt();
+        sc.nextLine();
+
+        System.out.print("\nDigite o seu nome: ");
+        String nome = sc.nextLine();
+
+        System.out.print("\nDigite sua idade: ");
+        int idade = sc.nextInt();
+        sc.nextLine();
+
+        System.out.print("\nDigite seu email: ");
+        String email = sc.nextLine();
+
+        System.out.println("\nDigite seu telefone: ");
+        String telefone = sc.nextLine();
+
+        Cliente novoCliente;
+        switch (opcao) {
+            case 1 -> novoCliente = new ClientePadrao(nome, idade, email, telefone);
+            case 2 -> novoCliente = new ClientePlus(nome, idade, email, telefone);
+            case 3 -> novoCliente = new ClientePremium(nome, idade, email, telefone);
+            default -> {
+                System.out.println("Opção inválida.");
+                return;
+            }
+        }
+
+        clienteController.cadastrarCliente(novoCliente);
+        CarrinhoService carrinho = new CarrinhoService();
+        carrinhos.put(novoCliente.getId(), carrinho);
+
+        keyPress();
+
+        boolean continuar = true;
+        while (continuar) {
+            System.out.println(MENSAGEM_USUARIO);
+            int acao = sc.nextInt();
+            sc.nextLine();
+
+            switch (acao) {
+                case 1 -> {
+                    System.out.println(MENSAGEMCOMPRODUTOS);
+                    int cod = sc.nextInt();
+                    sc.nextLine();
+
+                    System.out.print("Digite a quantidade: ");
+                    int qtd = sc.nextInt();
+                    sc.nextLine();
+
+                    if (cod == 2) {
+                        carrinho.adicionarOuAtualizarItem(cod, qtd,
+                                ApiConsulta.getImagemAleatoriaGato());
+                    } else if (cod == 3) {
+                        carrinho.adicionarOuAtualizarItem(cod, qtd,
+                                ApiConsulta.getImagemAleatoriaCachorro());
+                    } else {
+                        carrinho.adicionarOuAtualizarItem(cod, qtd);
+                    }
+                    System.out.println("Produto adicionado/atualizado!");
+                    keyPress();
+                }
+                case 2 -> {
+                    System.out.print("Digite o código do produto para remover: ");
+                    int cod = sc.nextInt();
+                    carrinho.removerItem(cod);
+                    System.out.println("Removido!");
+                    keyPress();
+                }
+                case 3 -> {
+                    carrinho.listarItens();
+                    keyPress();
+                }
+                case 4 -> {
+                    System.out.println(
+                            "Antes de você ir. Você tem direito a " + novoCliente.getTipoConta()
+                                    + (novoCliente.getTipoConta() > 1 ? " jogos promocionais!"
+                                            : " jogo promocional!"));
+                    System.out.println(
+                            "Cada jogo ganho aplica uma promoção de 20% sobre o preço total de seu carrinho.\nE é cumulativo! 😱\n\nQue os jogos comecem...");
+
+                    keyPress();
+
+                    int promocoesGanhas = 0;
+
+                    switch (novoCliente.getTipoConta()) {
+                        case 1 -> {
+                            if (JogoSorteio.iniciarJogo(sc))
+                                promocoesGanhas++;
+                        }
+                        case 2 -> {
+                            if (JogoSorteio.iniciarJogo(sc))
+                                promocoesGanhas++;
+                            keyPress();
+                            if (JogoMatematica.jogarMatematica(sc))
+                                promocoesGanhas++;
+                        }
+                        case 3 -> {
+                            if (JogoSorteio.iniciarJogo(sc))
+                                promocoesGanhas++;
+                            keyPress();
+                            if (JogoMatematica.jogarMatematica(sc))
+                                promocoesGanhas++;
+                            keyPress();
+                            if (JogoCacaNiquel.iniciarJogo(sc))
+                                promocoesGanhas++;
+                        }
+                    }
+
+                    if (promocoesGanhas > 0) {
+                        System.out.println("Meus parabéns! Você ganhou " + promocoesGanhas
+                                + (promocoesGanhas == 1 ? " promoção!" : " promoções!"));
+                        carrinho.listarItens(promocoesGanhas * 0.2);
+                        return;
+                    }
+
+                    carrinho.listarItens();
+                    System.out.println("Compra finalizada. Obrigado!");
+                    carrinho.limparCarrinho();
+                    continuar = false;
+                    keyPress();
+                }
+                case 0 -> continuar = false;
+                default -> System.out.println("Opção inválida.");
             }
         }
     }
 
     static final String MENSAGEM_USUARIO = """
-            \n\n%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+            %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
                 O que deseja fazer agora?
 
                 1 - Adicionar/Atualizar produto
@@ -134,13 +277,14 @@ public class Menu {
                 4 - Finalizar compra
                 0 - Sair
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
             """;
+
     static final String MENSAGEM = """
-                \n*****************************************************************************
+
+            *****************************************************************************
                                         Boas vindas ao e-legal!
 
-                    Aqui proporcionamos uma experiência inovadora aos nossos clientes.
+                        Aqui proporcionamos uma experiência inovadora aos nossos clientes.
             *****************************************************************************
 
                 Primeiro vamos fazer o seu cadastro.
@@ -154,35 +298,21 @@ public class Menu {
             Sua escolha:
             """;
 
-    static final String MENSAGEMCOMPRODUTOS =
-            """
-                    \n\n#######################################################################################
+    static final String MENSAGEMCOMPRODUTOS = """
 
-                        Ainda somos uma empresa nova, então só temos as seguintes opções de produtos:
+            #######################################################################################
 
-                        1 - Camiseta da Saudade (homenageie seu amigo que foi jogar no vasco) => R$100,00
-                        2 - Compre uma imagem aleatória de um gato => R$10,00
-                        3 - Compre uma imagem aleatória de um cachorro => R$10,00
+                Ainda somos uma empresa nova, então só temos as seguintes opções de produtos:
 
-                        Escolha uma das opções acima.
+                1 - Camiseta da Saudade (homenageie seu amigo que foi jogar no vasco) => R$100,00
+                2 - Compre uma imagem aleatória de um gato => R$10,00
+                3 - Compre uma imagem aleatória de um cachorro => R$10,00
 
-                                                Agradecemos a compreensão!
-                    #######################################################################################
-                    """;
+                Escolha uma das opções acima.
 
-    public static void sobre() {
-        String sobre = """
-                \n\n********************************************************************
-                    Esse projeto foi feito individualmente por Leonardo de Paula.
-                    Meus contatos:
-
-                    leofernandes9@gmail.com
-                    https://github.com/leodipaula
-
-                ********************************************************************\n\n
-                """;
-        System.out.println(sobre);
-    }
+                                    Agradecemos a compreensão!
+            #######################################################################################
+            """;
 
     public static void keyPress() {
         try {
@@ -191,6 +321,17 @@ public class Menu {
         } catch (IOException e) {
             System.out.println("Você pressionou uma tecla diferente de enter: " + e.getCause());
         }
+    }
+
+    public static void sobre() {
+        String mensagemSobre = """
+                \n**************************************************************************
+                    Projeto Desenvolvido por: Leonardo de Paula
+                    leofernandes9@gmail.com
+                    https://github.com/leodipaula
+                **************************************************************************
+                """;
+        System.out.println(mensagemSobre);
     }
 
     private static void executarTestesIniciais() {
@@ -211,8 +352,8 @@ public class Menu {
         carrinhos.put(clienteTeste3.getId(), carrinhoTeste3);
 
         carrinhoTeste1.adicionarOuAtualizarItem(1, 2);
-        carrinhoTeste2.adicionarOuAtualizarItem(2, 1);
-        carrinhoTeste3.adicionarOuAtualizarItem(3, 3);
+        carrinhoTeste2.adicionarOuAtualizarItem(2, 1, ApiConsulta.getImagemAleatoriaCachorro());
+        carrinhoTeste3.adicionarOuAtualizarItem(3, 3, ApiConsulta.getImagemAleatoriaGato());
 
         clienteController.listarClientes();
 
@@ -224,7 +365,6 @@ public class Menu {
         carrinhoTeste2.calcularTotal();
         carrinhoTeste3.calcularTotal();
 
-
-        System.out.println("Clientes e carrinhos testados!");
+        System.out.println("Daqui para cima são testes!");
     }
 }

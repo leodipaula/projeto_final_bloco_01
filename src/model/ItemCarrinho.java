@@ -5,6 +5,7 @@ public class ItemCarrinho {
     private String nomeProduto;
     private double precoUnitario;
     private int quantidade;
+    private String url;
 
     public ItemCarrinho(int codigoProduto, String nomeProduto, double precoUnitario,
             int quantidade) {
@@ -13,6 +14,27 @@ public class ItemCarrinho {
         this.precoUnitario = precoUnitario;
         this.quantidade = quantidade;
     }
+
+
+    public ItemCarrinho(int codigoProduto, String nomeProduto, double precoUnitario, int quantidade,
+            String url) {
+        this.codigoProduto = codigoProduto;
+        this.nomeProduto = nomeProduto;
+        this.precoUnitario = precoUnitario;
+        this.quantidade = quantidade;
+        this.url = url;
+    }
+
+
+    public String getUrl() {
+        return url;
+    }
+
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
 
     public int getCodigoProduto() {
         return codigoProduto;
@@ -40,6 +62,15 @@ public class ItemCarrinho {
 
     @Override
     public String toString() {
-        return codigoProduto + " - " + nomeProduto + " | Qtd: " + quantidade + " | R$" + getTotal();
+        StringBuilder sb = new StringBuilder();
+        sb.append(codigoProduto).append(" - ").append(nomeProduto).append(" | Qtd: ")
+                .append(quantidade).append(" | R$").append(String.format("%.2f", getTotal()));
+
+        if (url != null && !url.isEmpty()) {
+            sb.append("\nURL da imagem: ").append(url);
+        }
+
+        return sb.toString();
     }
+
 }
