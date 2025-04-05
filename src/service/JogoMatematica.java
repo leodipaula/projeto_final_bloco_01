@@ -7,7 +7,7 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class JogoMatematica {
-    public static boolean jogarMatematica(Scanner scanner) {
+    public static boolean jogarMatematica(Scanner sc) {
         Random random = new Random();
 
         StringBuilder expressao = new StringBuilder();
@@ -32,13 +32,13 @@ public class JogoMatematica {
 
         int tentativas = 0;
 
-        if (scanner.hasNext())
-            scanner.nextLine();
+        if (sc.hasNext())
+            sc.nextLine();
 
         while (tentativas < 5) {
 
             System.out.println("Tentativa " + (tentativas + 1) + ":");
-            String input = scanner.nextLine();
+            String input = sc.nextLine();
 
             try {
                 int resposta = Integer.parseInt(input);

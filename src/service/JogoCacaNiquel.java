@@ -7,7 +7,7 @@ public class JogoCacaNiquel {
     private static final String[] SIMBOLOS = {"🍒", "🍋", "🍇", "🍉", "⭐", "🔔"};
     private static final int MAX_TENTATIVAS = 5;
 
-    public static boolean iniciarJogo(Scanner scanner) {
+    public static boolean iniciarJogo(Scanner sc) {
         Random random = new Random();
         int tentativas = 0;
 
@@ -17,7 +17,7 @@ public class JogoCacaNiquel {
         while (tentativas < MAX_TENTATIVAS) {
             System.out
                     .print("\nTentativa " + (tentativas + 1) + " - Pressione ENTER para girar...");
-            scanner.nextLine();
+            sc.nextLine();
 
             String simbolo1 = SIMBOLOS[random.nextInt(SIMBOLOS.length)];
             String simbolo2 = SIMBOLOS[random.nextInt(SIMBOLOS.length)];
